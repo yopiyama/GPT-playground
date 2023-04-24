@@ -84,6 +84,7 @@ class MyClient(discord.Client):
             to_gpt_message = [{k: v for k, v in d.items() if k != 'created_at'}
                                for d in to_gpt_message]
 
+            await message.add_reaction('\U0001F4E9')
             await message.channel.send(completion_gpt(to_gpt_message))
 
 
