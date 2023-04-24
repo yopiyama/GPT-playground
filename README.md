@@ -13,5 +13,6 @@
 3. 下記のコマンドで Bot を稼働
 
 ```sh
+touch log/discord_bot.log
 python src/discord_bot.py
 ```
