@@ -1,13 +1,24 @@
 import os
+import json
 import datetime as dt
 import openai
 import discord
-from logging import getLogger, INFO, DEBUG, StreamHandler
+from logging import getLogger, INFO, DEBUG, Formatter
+from logging.handlers import RotatingFileHandler
+
+handler = RotatingFileHandler(
+    r'./log/discord_bot.log',
+    encoding='utf-8',
+    maxBytes=100000,
+    backupCount=5
+)
+handler.setLevel(DEBUG)
+formatter = Formatter(
+    '%(asctime)s : %(levelname)s - %(filename)s - %(message)s')
+handler.setFormatter(formatter)
 
 logger = getLogger(__name__)
-handler = StreamHandler()
-handler.setLevel(INFO)
-logger.setLevel(INFO)
+logger.setLevel(DEBUG)
 logger.addHandler(handler)
 logger.propagate = False
 
@@ -25,7 +36,7 @@ def completion_gpt(messages):
         messages=messages
     )
 
-    logger.debug(response.choices[0].message.content)
+    logger.debug(json.dumps(response))
     return response.choices[0].message.content
 
 class MyClient(discord.Client):
