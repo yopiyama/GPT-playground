@@ -28,11 +28,12 @@ intents.message_content = True
 openai.api_key = os.getenv('OPENAI_API_KEY')
 
 DISCORD_CHANNEL_NAME = 'gpt'
+MODEL_NAME = 'gpt-3.5-turbo-16k-0613'
 
 def completion_gpt(messages):
     logger.debug(messages)
     response = openai.ChatCompletion.create(
-        model='gpt-3.5-turbo',
+        model=MODEL_NAME,
         messages=messages
     )
 
@@ -42,6 +43,7 @@ def completion_gpt(messages):
 class MyClient(discord.Client):
     async def on_ready(self):
         logger.info(f'Logged on as {self.user}')
+        logger.info('Model Name > %s', MODEL_NAME)
 
     async def on_message(self, message):
         # don't respond to ourselves
@@ -52,7 +54,7 @@ class MyClient(discord.Client):
 
         if type(message.channel) is discord.TextChannel and message.channel.name == DISCORD_CHANNEL_NAME:
             # await message.channel.send(completion_gpt(message.content))
-            thread = await message.create_thread(name=message.content)
+            thread = await message.create_thread(name=message.content[:20])
             await message.add_reaction('\U0001F4E9')
             # await thread.send('You said: ' + message.content)
             await thread.send(completion_gpt([{
