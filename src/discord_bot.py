@@ -29,6 +29,7 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 
 DISCORD_CHANNEL_NAME = 'gpt'
 MODEL_NAME = 'gpt-3.5-turbo-16k-0613'
+HISTORY_LIMIT = 30
 
 def completion_gpt(messages):
     logger.debug(messages)
@@ -54,7 +55,7 @@ class MyClient(discord.Client):
 
         if type(message.channel) is discord.TextChannel and message.channel.name == DISCORD_CHANNEL_NAME:
             # await message.channel.send(completion_gpt(message.content))
-            thread = await message.create_thread(name=message.content[:20])
+            thread = await message.create_thread(name=message.content[:90])
             await message.add_reaction('\U0001F4E9')
             # await thread.send('You said: ' + message.content)
             await thread.send(completion_gpt([{
@@ -66,7 +67,7 @@ class MyClient(discord.Client):
         if type(message.channel) is discord.Thread and message.channel.parent.name == DISCORD_CHANNEL_NAME:
             # await message.channel.send('You said: ' + message.content)
             to_gpt_message = []
-            async for post in message.channel.history(limit=10):
+            async for post in message.channel.history(limit=HISTORY_LIMIT):
                 if post.type == discord.MessageType.thread_starter_message:
                     post.author = 'user'
                     post.content = post.system_content
