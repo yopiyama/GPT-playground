@@ -15,7 +15,8 @@
 				"mechatroner.rainbow-csv",
 				"DavidAnson.vscode-markdownlint",
 				"yzhang.markdown-all-in-one",
-				"oderwat.indent-rainbow"
+				"oderwat.indent-rainbow",
+				"GitHub.copilot-chat"
 			]
 		}
 	}
